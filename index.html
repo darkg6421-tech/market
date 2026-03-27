@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Apex Wealth Engine | Global Wealth Management Platform 2026 | Enterprise Edition</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #00fa9a;
+    --primary-dark: #00cc7a;
+    --primary-glow: rgba(0,250,154,0.6);
+    --secondary: #3b82f6;
+    --secondary-glow: rgba(59,130,246,0.6);
+    --accent: #8b5cf6;
+    --accent-glow: rgba(139,92,246,0.6);
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --success: #10b981;
+    --info: #06b6d4;
+    --pink: #ec489a;
+    --cyan: #06b6d4;
+    --dark-bg: #0a0e1a;
+    --card-bg: rgba(17, 24, 39, 0.95);
+    --card-bg-light: rgba(26, 31, 46, 0.95);
+    --text-muted: #9ca3af;
+    --glass-border: rgba(255,255,255,0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: radial-gradient(circle at 0% 0%, rgba(0,250,154,0.08) 0%, rgba(10,14,26,1) 100%);
+    color: #ffffff;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Animated Background */
+.animated-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    overflow: hidden;
+}
+
+.gradient-sphere {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(80px);
+    animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(100px, -50px) scale(1.1); }
+    66% { transform: translate(-50px, 100px) scale(0.9); }
+}
+
+/* Premium Sidebar */
+.sidebar {
+    position: fixed;
+    left: -320px;
+    top: 0;
+    width: 320px;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.98);
+    backdrop-filter: blur(20px);
+    border-right: 1px solid var(--glass-border);
+    z-index: 1000;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 2px 0 50px rgba(0,0,0,0.5);
+    overflow-y: auto;
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar-header {
+    padding: 30px 20px;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(0,250,154,0.2), rgba(139,92,246,0.2));
+    border-bottom: 1px solid var(--glass-border);
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+    opacity: 0.1;
+    animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.sidebar-header h2 {
+    font-size: 2rem;
+    background: linear-gradient(135deg, var(--primary), var(--accent), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Menu Toggle */
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1001;
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--primary);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 12px 18px;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.menu-toggle:hover {
+    background: var(--primary);
+    color: var(--dark-bg);
+    transform: scale(1.05) rotate(90deg);
+}
+
+.container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Premium Header */
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 40px;
+    background: linear-gradient(135deg, rgba(0,250,154,0.15), rgba(139,92,246,0.15), rgba(59,130,246,0.15));
+    border-radius: 40px;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    animation: slideDown 0.6s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.header::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+    transform: rotate(45deg);
+    animation: shine 3s infinite;
+}
+
+@keyframes shine {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
+}
+
+h1 {
+    font-size: 3.5rem;
+    background: linear-gradient(135deg, #00fa9a, #8b5cf6, #3b82f6, #ec489a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 300% 300%;
+    animation: gradientShift 5s ease infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.quick-btn {
+    padding: 12px 28px;
+    background: rgba(17, 24, 39, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 50px;
+    color: var(--primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 0.9rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.quick-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.quick-btn:hover::before {
+    left: 100%;
+}
+
+.quick-btn:hover {
+    background: var(--primary);
+    color: var(--dark-bg);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,250,154,0.3);
+}
+
+/* Main Grid */
+.main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 1024px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Premium Cards */
+.card {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 28px;
+    padding: 28px;
+    border: 1px solid var(--glass-border);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: fadeInUp 0.5s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
+    transform: scaleX(0);
+    transition: transform 0.5s;
+}
+
+.card:hover::before {
+    transform: scaleX(1);
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+    border-color: var(--primary);
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 14px 18px;
+    background: rgba(26, 31, 46, 0.8);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(0,250,154,0.2);
+    transform: scale(1.02);
+}
+
+/* Results Grid */
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.result-card {
+    background: linear-gradient(135deg, rgba(0,250,154,0.12), rgba(139,92,246,0.12));
+    padding: 20px;
+    border-radius: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid var(--glass-border);
+    position: relative;
+    overflow: hidden;
+}
+
+.result-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    transform: scaleX(0);
+    transition: transform 0.3s;
+}
+
+.result-card:hover::after {
+    transform: scaleX(1);
+}
+
+.result-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    background: linear-gradient(135deg, rgba(0,250,154,0.2), rgba(139,92,246,0.2));
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.result-card .value {
+    font-size: 2rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Stats Section */
+.stats-section {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 15px;
+    margin-top: 24px;
+}
+
+.stat-card {
+    background: rgba(26, 31, 46, 0.8);
+    padding: 18px;
+    border-radius: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid var(--glass-border);
+    position: relative;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    background: rgba(0,250,154,0.15);
+    border-color: var(--primary);
+}
+
+.stat-value {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+/* Market Ticker */
+.market-ticker {
+    background: rgba(0,0,0,0.5);
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.ticker-content {
+    display: inline-block;
+    animation: ticker 30s linear infinite;
+}
+
+@keyframes ticker {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+/* AI Insights */
+.ai-insights {
+    background: linear-gradient(135deg, rgba(0,250,154,0.05), rgba(139,92,246,0.05));
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 20px;
+    border: 1px solid var(--glass-border);
+    position: relative;
+}
+
+.ai-badge {
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    background: var(--primary);
+    color: var(--dark-bg);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .results-grid, .stats-section {
+        grid-template-columns: 1fr;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .quick-btn {
+        padding: 8px 16px;
+        font-size: 0.75rem;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="animated-bg">
+    <div class="gradient-sphere" style="top: -200px; left: -200px;"></div>
+    <div class="gradient-sphere" style="bottom: -200px; right: -200px; animation-delay: -5s;"></div>
+    <div class="gradient-sphere" style="top: 50%; left: 50%; width: 300px; height: 300px; animation-delay: -10s;"></div>
+</div>
+
+<button class="menu-toggle" onclick="toggleMenu()">
+    <i class="fas fa-chart-line"></i>
+</button>
+
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h2><i class="fas fa-crown"></i> APEX<br>ENTERPRISE</h2>
+        <p style="font-size: 0.7rem; margin-top: 10px;">World-Class Wealth Management</p>
+    </div>
+    <div class="sidebar-stats" style="padding: 20px;">
+        <div style="text-align: center; background: rgba(0,0,0,0.3); border-radius: 15px; padding: 15px;">
+            <div style="font-size: 0.7rem; color: var(--text-muted);">Total AUM</div>
+            <div style="font-size: 1.8rem; color: var(--primary);" id="sidebarWealth">₹0</div>
+            <div style="font-size: 0.6rem;">+32% this year</div>
+        </div>
+    </div>
+    <ul class="sidebar-menu" style="list-style: none; padding: 0 15px;">
+        <li style="margin: 8px 0;"><a onclick="switchTab('dashboard')" style="display: flex; align-items: center; gap: 12px; padding: 12px; cursor: pointer; border-radius: 12px; transition: all 0.3s;"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li style="margin: 8px 0;"><a onclick="switchTab('calculator')" style="display: flex; align-items: center; gap: 12px; padding: 12px; cursor: pointer; border-radius: 12px;"><i class="fas fa-calculator"></i> Calculator</a></li>
+        <li style="margin: 8px 0;"><a onclick="switchTab('clients')" style="display: flex; align-items: center; gap: 12px; padding: 12px; cursor: pointer; border-radius: 12px;"><i class="fas fa-users"></i> Clients</a></li>
+        <li style="margin: 8px 0;"><a onclick="switchTab('portfolio')" style="display: flex; align-items: center; gap: 12px; padding: 12px; cursor: pointer; border-radius: 12px;"><i class="fas fa-chart-pie"></i> Portfolio</a></li>
+        <li style="margin: 8px 0;"><a onclick="switchTab('goals')" style="display: flex; align-items: center; gap: 12px; padding: 12px; cursor: pointer; border-radius: 12px;"><i class="fas fa-bullseye"></i> Goals</a></li>
+        <li style="margin: 8px 0;"><a onclick="switchTab('compare')" style="display: flex; align-items: center; gap: 12px; padding: 12px; cursor: pointer; border-radius: 12px;"><i class="fas fa-chart-line"></i> Compare</a></li>
+        <li style="margin: 8px 0;"><a onclick="switchTab('reports')" style="display: flex; align-items: center; gap: 12px; padding: 12px; cursor: pointer; border-radius: 12px;"><i class="fas fa-file-alt"></i> Reports</a></li>
+        <li style="margin: 8px 0;"><a onclick="switchTab('aiadvisor')" style="display: flex; align-items: center; gap: 12px; padding: 12px; cursor: pointer; border-radius: 12px;"><i class="fas fa-robot"></i> AI Advisor</a></li>
+        <li style="margin: 8px 0;"><a onclick="switchTab('tax')" style="display: flex; align-items: center; gap: 12px; padding: 12px; cursor: pointer; border-radius: 12px;"><i class="fas fa-file-invoice-dollar"></i> Tax Planner</a></li>
+        <li style="margin: 8px 0;"><a onclick="switchTab('risk')" style="display: flex; align-items: center; gap: 12px; padding: 12px; cursor: pointer; border-radius: 12px;"><i class="fas fa-shield-alt"></i> Risk Analyzer</a></li>
+        <li style="margin: 8px 0;"><a onclick="switchTab('settings')" style="display: flex; align-items: center; gap: 12px; padding: 12px; cursor: pointer; border-radius: 12px;"><i class="fas fa-cog"></i> Settings</a></li>
+    </ul>
+</div>
+
+<div class="overlay" id="overlay" onclick="toggleMenu()" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 999; display: none;"></div>
+
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-chart-line"></i> Apex Wealth Engine<br><span style="font-size: 1rem;">Enterprise Edition | World-Class Wealth Management Platform</span></h1>
+        <p style="color: var(--text-muted); margin-top: 15px;">Powered by Advanced AI | Real-time Analytics | Global Market Intelligence</p>
+    </div>
+
+    <div class="market-ticker" id="marketTicker">
+        <div class="ticker-content" id="tickerContent"></div>
+    </div>
+
+    <div class="quick-actions">
+        <button class="quick-btn" onclick="loadPreset('conservative')"><i class="fas fa-shield-alt"></i> Conservative</button>
+        <button class="quick-btn" onclick="loadPreset('moderate')"><i class="fas fa-chart-line"></i> Moderate</button>
+        <button class="quick-btn" onclick="loadPreset('aggressive')"><i class="fas fa-rocket"></i> Aggressive</button>
+        <button class="quick-btn" onclick="runMonteCarlo()"><i class="fas fa-chart-scatter"></i> Monte Carlo</button>
+        <button class="quick-btn" onclick="generateWealthPlan()"><i class="fas fa-magic"></i> AI Wealth Plan</button>
+        <button class="quick-btn" onclick="exportFullReport()"><i class="fas fa-file-pdf"></i> Export Report</button>
+    </div>
+
+    <!-- Dashboard Tab -->
+    <div id="dashboardTab" class="tab-content active">
+        <div class="main-grid">
+            <div class="card">
+                <h3><i class="fas fa-chart-line"></i> Portfolio Performance</h3>
+                <canvas id="wealthChart" style="max-height: 300px;"></canvas>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-chart-pie"></i> Asset Allocation</h3>
+                <canvas id="assetChart" style="max-height: 300px;"></canvas>
+            </div>
+        </div>
+        <div class="ai-insights">
+            <div class="ai-badge"><i class="fas fa-brain"></i> AI INSIGHTS</div>
+            <div id="aiInsights"></div>
+        </div>
+    </div>
+
+    <!-- Calculator Tab -->
+    <div id="calculatorTab" class="tab-content">
+        <div class="main-grid">
+            <div class="card">
+                <h3><i class="fas fa-sliders-h"></i> Advanced Investment Parameters</h3>
+                <div class="form-group">
+                    <label>Investment Mode</label>
+                    <select id="mode" onchange="onModeChange()">
+                        <option value="SIP">Systematic Investment Plan (SIP)</option>
+                        <option value="Lump">Lumpsum Investment</option>
+                        <option value="SWP">Systematic Withdrawal Plan (SWP)</option>
+                        <option value="STP">Systematic Transfer Plan (STP)</option>
+                    </select>
+                </div>
+                <div class="form-group" id="sipAmountGroup">
+                    <label>Monthly SIP Amount (₹)</label>
+                    <input type="number" id="amount" value="10000" step="1000">
+                </div>
+                <div class="form-group" id="lumpAmountGroup" style="display:none">
+                    <label>Lumpsum Amount (₹)</label>
+                    <input type="number" id="lumpAmount" value="1000000">
+                </div>
+                <div class="form-group">
+                    <label>Expected Return Rate (%)</label>
+                    <input type="number" id="rate" value="12" step="0.5">
+                </div>
+                <div class="form-group">
+                    <label>Investment Duration (Years)</label>
+                    <input type="number" id="years" value="10" step="1">
+                </div>
+                <div class="form-group">
+                    <label>Inflation Rate (%)</label>
+                    <input type="number" id="inflation" value="6" step="0.5">
+                </div>
+                <div class="form-group" id="stepupGroup">
+                    <label>Step-up / Annual Increase (%)</label>
+                    <input type="number" id="stepup" value="10" step="1">
+                </div>
+                <div class="form-group">
+                    <label>Financial Goal (₹)</label>
+                    <input type="number" id="target" value="10000000">
+                </div>
+                <button class="quick-btn" onclick="calculateAndRefresh()" style="width:100%; background: var(--primary); color: var(--dark-bg);"><i class="fas fa-calculator"></i> Calculate & Analyze</button>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-chart-bar"></i> Investment Results</h3>
+                <div class="results-grid">
+                    <div class="result-card" onclick="showDetail('invested')"><div class="label">Total Invested</div><div class="value" id="invested">₹0</div></div>
+                    <div class="result-card" onclick="showDetail('returns')"><div class="label">Total Returns</div><div class="value" id="returns">₹0</div></div>
+                    <div class="result-card" onclick="showDetail('total')"><div class="label">Final Corpus</div><div class="value" id="total">₹0</div></div>
+                </div>
+                <div id="goalMsg" style="text-align:center; padding:15px; border-radius:16px; margin-top:15px;"></div>
+                <canvas id="chart" style="max-height: 300px;"></canvas>
+            </div>
+        </div>
+        <div class="stats-section" id="statsSection"></div>
+    </div>
+
+    <!-- Clients Tab -->
+    <div id="clientsTab" class="tab-content">
+        <div class="card">
+            <h3><i class="fas fa-user-plus"></i> Client Portfolio Management</h3>
+            <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px;">
+                <input type="text" id="clientName" placeholder="Client Name" style="flex:1">
+                <input type="email" id="clientEmail" placeholder="Email">
+                <input type="tel" id="clientPhone" placeholder="Phone">
+                <button class="quick-btn" onclick="saveClient()"><i class="fas fa-save"></i> Save</button>
+                <button class="quick-btn" onclick="exportData()"><i class="fas fa-download"></i> Export</button>
+                <button class="quick-btn" onclick="importData()"><i class="fas fa-upload"></i> Import</button>
+            </div>
+            <div id="clientList" style="max-height:500px; overflow-y:auto;"></div>
+        </div>
+    </div>
+
+    <!-- Portfolio Tab -->
+    <div id="portfolioTab" class="tab-content">
+        <div class="card">
+            <h3><i class="fas fa-chart-pie"></i> Portfolio Optimizer</h3>
+            <div class="form-group">
+                <label>Equity Allocation (%)</label>
+                <input type="range" id="equityAlloc" min="0" max="100" value="60" onchange="updatePortfolio()">
+                <div>Equity: <span id="equityPercent">60</span>% | Debt: <span id="debtPercent">40</span>%</div>
+            </div>
+            <canvas id="portfolioChart" style="max-height:300px;"></canvas>
+            <div id="portfolioProjection" class="ai-insights" style="margin-top:20px;"></div>
+        </div>
+    </div>
+
+    <!-- Goals Tab -->
+    <div id="goalsTab" class="tab-content">
+        <div class="card">
+            <h3><i class="fas fa-bullseye"></i> Goal-Based Planning</h3>
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                <input type="text" id="goalName" placeholder="Goal Name">
+                <input type="number" id="goalTarget" placeholder="Target Amount">
+                <input type="number" id="goalYears" placeholder="Years">
+                <button class="quick-btn" onclick="addGoal()">Add Goal</button>
+            </div>
+            <div id="goalsList" style="margin-top:20px;"></div>
+        </div>
+    </div>
+
+    <!-- Compare Tab -->
+    <div id="compareTab" class="tab-content">
+        <div class="card">
+            <h3><i class="fas fa-chart-simple"></i> Multi-Scenario Analysis</h3>
+            <div class="results-grid">
+                <div><label>Conservative (8%)</label><input type="number" id="compareRate1" value="8"></div>
+                <div><label>Moderate (12%)</label><input type="number" id="compareRate2" value="12"></div>
+                <div><label>Aggressive (15%)</label><input type="number" id="compareRate3" value="15"></div>
+            </div>
+            <button class="quick-btn" onclick="compareReturns()">Compare Returns</button>
+            <canvas id="compareChart" style="margin-top:20px; max-height:400px;"></canvas>
+        </div>
+    </div>
+
+    <!-- AI Advisor Tab -->
+    <div id="aiadvisorTab" class="tab-content">
+        <div class="card">
+            <h3><i class="fas fa-robot"></i> AI Financial Advisor</h3>
+            <div class="form-group">
+                <label>Ask me anything about your finances</label>
+                <textarea id="aiQuestion" rows="3" placeholder="e.g., How can I save for retirement? What's the best investment strategy?"></textarea>
+                <button class="quick-btn" onclick="askAI()" style="margin-top:10px;"><i class="fas fa-comment"></i> Get AI Advice</button>
+            </div>
+            <div id="aiResponse" class="ai-insights" style="margin-top:20px;"></div>
+        </div>
+    </div>
+
+    <!-- Tax Planner Tab -->
+    <div id="taxTab" class="tab-content">
+        <div class="card">
+            <h3><i class="fas fa-file-invoice-dollar"></i> Tax Planning Calculator</h3>
+            <div class="form-group">
+                <label>Annual Income (₹)</label>
+                <input type="number" id="annualIncome" placeholder="Annual Income">
+            </div>
+            <div class="form-group">
+                <label>Investment Under 80C (₹)</label>
+                <input type="number" id="investment80C" placeholder="Max ₹1.5L">
+            </div>
+            <button class="quick-btn" onclick="calculateTax()">Calculate Tax Liability</button>
+            <div id="taxResult" style="margin-top:20px;"></div>
+        </div>
+    </div>
+
+    <!-- Risk Analyzer Tab -->
+    <div id="riskTab" class="tab-content">
+        <div class="card">
+            <h3><i class="fas fa-shield-alt"></i> Risk Profile Analyzer</h3>
+            <div id="riskQuestions">
+                <div class="form-group"><label>1. Investment Horizon</label><select id="riskQ1"><option value="5">Less than 3 years</option><option value="3">3-5 years</option><option value="1">5-10 years</option><option value="0">More than 10 years</option></select></div>
+                <div class="form-group"><label>2. Risk Tolerance</label><select id="riskQ2"><option value="5">Very Low</option><option value="3">Low</option><option value="1">Moderate</option><option value="0">High</option></select></div>
+                <div class="form-group"><label>3. Expected Returns</label><select id="riskQ3"><option value="5">Below 8%</option><option value="3">8-12%</option><option value="1">12-15%</option><option value="0">Above 15%</option></select></div>
+            </div>
+            <button class="quick-btn" onclick="analyzeRisk()">Analyze Risk Profile</button>
+            <div id="riskResult" class="ai-insights" style="margin-top:20px;"></div>
+        </div>
+    </div>
+
+    <!-- Reports Tab -->
+    <div id="reportsTab" class="tab-content">
+        <div class="card">
+            <h3><i class="fas fa-file-alt"></i> Comprehensive Reports</h3>
+            <div class="form-group">
+                <label>Report Type</label>
+                <select id="reportType">
+                    <option value="summary">Investment Summary</option>
+                    <option value="detailed">Detailed Analysis</option>
+                    <option value="tax">Tax Report</option>
+                    <option value="portfolio">Portfolio Report</option>
+                </select>
+            </div>
+            <button class="quick-btn" onclick="generateFullReport()">Generate Report</button>
+            <div id="reportPreview" style="margin-top:20px;"></div>
+        </div>
+    </div>
+
+    <!-- Settings Tab -->
+    <div id="settingsTab" class="tab-content">
+        <div class="card">
+            <h3><i class="fas fa-cog"></i> Platform Settings</h3>
+            <div class="form-group"><label>Theme</label><select id="themeSelect"><option value="dark">Dark Theme</option><option value="light">Light Theme</option></select></div>
+            <div class="form-group"><label>Notifications</label><input type="checkbox" id="notifications" checked> Enable</div>
+            <button class="quick-btn" onclick="clearAllData()" style="background: var(--danger);">Clear All Data</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let chart, wealthChart, assetChart, portfolioChart, compareChart;
+let currentCalculation = null;
+let goals = JSON.parse(localStorage.getItem("goals") || "[]");
+
+function initCharts() {
+    chart = new Chart(document.getElementById("chart"), {
+        type: 'line',
+        data: { labels: [], datasets: [{ label: "Portfolio Growth", data: [], borderColor: "#00fa9a", backgroundColor: "rgba(0,250,154,0.1)", tension: 0.4, fill: true }] },
+        options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { labels: { color: '#fff' } } }, scales: { y: { ticks: { callback: v => '₹' + v.toLocaleString() } } } }
+    });
+    
+    wealthChart = new Chart(document.getElementById("wealthChart"), {
+        type: 'line',
+        data: { labels: [], datasets: [{ label: "Wealth Growth", data: [], borderColor: "#00fa9a", tension: 0.4 }] },
+        options: { responsive: true, maintainAspectRatio: true }
+    });
+    
+    assetChart = new Chart(document.getElementById("assetChart"), {
+        type: 'doughnut',
+        data: { labels: ['Equity', 'Debt', 'Gold', 'Real Estate'], datasets: [{ data: [50, 30, 10, 10], backgroundColor: ['#00fa9a', '#3b82f6', '#f59e0b', '#8b5cf6'] }] },
+        options: { responsive: true, maintainAspectRatio: true }
+    });
+    
+    portfolioChart = new Chart(document.getElementById("portfolioChart"), {
+        type: 'pie',
+        data: { labels: ['Equity', 'Debt'], datasets: [{ data: [60, 40], backgroundColor: ['#00fa9a', '#3b82f6'] }] },
+        options: { responsive: true }
+    });
+    
+    compareChart = new Chart(document.getElementById("compareChart"), {
+        type: 'line',
+        data: { labels: [], datasets: [] },
+        options: { responsive: true }
+    });
+}
+
+function calculate() {
+    let mode = document.getElementById("mode").value;
+    let P = mode === "SIP" ? parseFloat(document.getElementById("amount").value) : parseFloat(document.getElementById("lumpAmount").value);
+    let r = parseFloat(document.getElementById("rate").value);
+    let t = parseFloat(document.getElementById("years").value);
+    let inflation = parseFloat(document.getElementById("inflation").value);
+    let stepup = mode === "SIP" ? parseFloat(document.getElementById("stepup").value) : 0;
+    let target = parseFloat(document.getElementById("target").value);
+    
+    let realR = ((1 + r/100) / (1 + inflation/100)) - 1;
+    let total = 0, invested = 0, yearly = [];
+    
+    if(mode === "SIP") {
+        let monthlyRate = realR / 12;
+        let yearlyP = P;
+        for(let y = 1; y <= t; y++) {
+            let yearTotal = 0;
+            for(let m = 1; m <= 12; m++) yearTotal = (yearTotal + yearlyP) * (1 + monthlyRate);
+            total += yearTotal;
+            invested += yearlyP * 12;
+            yearly.push(Math.round(total));
+            yearlyP *= (1 + stepup/100);
+        }
+    } else {
+        total = P * Math.pow(1 + realR, t);
+        invested = P;
+        for(let y = 1; y <= t; y++) yearly.push(Math.round(P * Math.pow(1 + realR, y)));
+    }
+    
+    let returns = total - invested;
+    currentCalculation = { total, invested, returns, yearly, mode, years: t, amount: P, rate: r };
+    
+    document.getElementById("invested").innerHTML = "₹ " + invested.toLocaleString('en-IN');
+    document.getElementById("returns").innerHTML = "₹ " + returns.toLocaleString('en-IN');
+    document.getElementById("total").innerHTML = "₹ " + total.toLocaleString('en-IN');
+    document.getElementById("sidebarWealth").innerHTML = "₹ " + total.toLocaleString('en-IN');
+    
+    let msgDiv = document.getElementById("goalMsg");
+    if(total >= target) {
+        msgDiv.innerHTML = '<i class="fas fa-trophy"></i> TARGET ACHIEVED! 🎉<br>Congratulations on reaching your goal!';
+        msgDiv.style.background = "rgba(16,185,129,0.2)";
+        msgDiv.style.border = "1px solid #10b981";
+    } else {
+        let shortfall = target - total;
+        msgDiv.innerHTML = `<i class="fas fa-chart-line"></i> Shortfall: ₹${shortfall.toLocaleString('en-IN')}<br>Need ${(shortfall/target*100).toFixed(1)}% more investment`;
+        msgDiv.style.background = "rgba(239,68,68,0.2)";
+        msgDiv.style.border = "1px solid #ef4444";
+    }
+    
+    updateStats(total, invested, returns, t, r);
+    updateAIInsights();
+    
+    chart.data.labels = yearly.map((_,i)=> "Year " + (i+1));
+    chart.data.datasets[0].data = yearly;
+    chart.update();
+    
+    wealthChart.data.labels = yearly.map((_,i)=> "Year " + (i+1));
+    wealthChart.data.datasets[0].data = yearly;
+    wealthChart.update();
+}
+
+function updateStats(total, invested, returns, years, rate) {
+    let cagr = (Math.pow(total/invested, 1/years) - 1) * 100;
+    let multiplier = total / invested;
+    let monthlyIncome = total / years / 12;
+    
+    let html = `
+        <div class="stat-card"><i class="fas fa-chart-line"></i><div class="stat-value">${((returns/invested)*100).toFixed(1)}%</div><div class="stat-label">Total ROI</div></div>
+        <div class="stat-card"><i class="fas fa-percentage"></i><div class="stat-value">${cagr.toFixed(1)}%</div><div class="stat-label">CAGR</div></div>
+        <div class="stat-card"><i class="fas fa-chart-line"></i><div class="stat-value">${multiplier.toFixed(1)}x</div><div class="stat-label">Wealth Multiplier</div></div>
+        <div class="stat-card"><i class="fas fa-rupee-sign"></i><div class="stat-value">₹${Math.round(monthlyIncome).toLocaleString()}</div><div class="stat-label">Monthly Income</div></div>
+        <div class="stat-card"><i class="fas fa-chart-simple"></i><div class="stat-value">${rate}%</div><div class="stat-label">Annual Return</div></div>
+        <div class="stat-card"><i class="fas fa-chart-line"></i><div class="stat-value">${(total/invested*100-100).toFixed(1)}%</div><div class="stat-label">Net Growth</div></div>
+    `;
+    document.getElementById("statsSection").innerHTML = html;
+}
+
+function updateAIInsights() {
+    if(!currentCalculation) return;
+    let insights = [
+        `📊 Your wealth multiplier is ${(currentCalculation.total/currentCalculation.invested).toFixed(1)}x, which is ${(currentCalculation.total/currentCalculation.invested > 2 ? "excellent" : "good")} for this timeframe.`,
+        `🎯 Based on your goals, you need to increase returns by ${((currentCalculation.total/currentCalculation.invested) > 2 ? "maintain current strategy" : "consider higher return options")}.`,
+        `💰 Monthly investment of ₹${currentCalculation.amount.toLocaleString()} could generate ₹${Math.round(currentCalculation.total/currentCalculation.years/12).toLocaleString()} monthly income in retirement.`,
+        `📈 Historical data suggests ${currentCalculation.rate}% returns are ${currentCalculation.rate > 12 ? "aggressive" : "moderate"} for this asset mix.`
+    ];
+    document.getElementById("aiInsights").innerHTML = insights.map(i => `<div class="tip-card" style="margin:10px 0; padding:12px; background:rgba(0,0,0,0.3); border-radius:12px;">${i}</div>`).join('');
+}
+
+function onModeChange() {
+    let mode = document.getElementById("mode").value;
+    document.getElementById("sipAmountGroup").style.display = mode === "SIP" ? "block" : "none";
+    document.getElementById("lumpAmountGroup").style.display = mode === "Lump" ? "block" : "none";
+    document.getElementById("stepupGroup").style.display = mode === "SIP" ? "block" : "none";
+    calculate();
+}
+
+function calculateAndRefresh() { calculate(); showNotification("Calculation complete!", "success"); }
+
+function loadPreset(type) {
+    if(type === 'conservative') { document.getElementById("rate").value = "8"; document.getElementById("inflation").value = "5"; }
+    else if(type === 'moderate') { document.getElementById("rate").value = "12"; document.getElementById("inflation").value = "6"; }
+    else if(type === 'aggressive') { document.getElementById("rate").value = "18"; document.getElementById("inflation").value = "7"; }
+    calculate();
+    showNotification(`${type.toUpperCase()} preset loaded!`, "success");
+}
+
+function runMonteCarlo() {
+    if(!currentCalculation) { alert("Calculate first!"); return; }
+    let simulations = [];
+    for(let i = 0; i < 100; i++) {
+        let randomReturn = currentCalculation.rate * (0.8 + Math.random() * 0.4);
+        let finalValue = currentCalculation.invested * Math.pow(1 + randomReturn/100, currentCalculation.years);
+        simulations.push(finalValue);
+    }
+    let best = Math.max(...simulations);
+    let worst = Math.min(...simulations);
+    let average = simulations.reduce((a,b) => a+b, 0) / simulations.length;
+    Swal.fire({ title: "Monte Carlo Simulation", html: `Best Case: ₹${best.toLocaleString('en-IN')}<br>Worst Case: ₹${worst.toLocaleString('en-IN')}<br>Average: ₹${average.toLocaleString('en-IN')}`, icon: "info" });
+}
+
+function generateWealthPlan() {
+    if(!currentCalculation) { alert("Calculate first!"); return; }
+    let monthlySIP = currentCalculation.amount;
+    let years = currentCalculation.years;
+    let target = currentCalculation.total;
+    Swal.fire({ title: "AI Wealth Plan", html: `💰 Monthly Investment: ₹${monthlySIP.toLocaleString()}<br>📅 Duration: ${years} years<br>🎯 Projected Corpus: ₹${target.toLocaleString('en-IN')}<br>⭐ Recommendation: ${target > 10000000 ? "On track for financial freedom!" : "Consider increasing SIP by 10-15% annually"}`, icon: "success" });
+}
+
+function compareReturns() {
+    let rate1 = parseFloat(document.getElementById("compareRate1").value);
+    let rate2 = parseFloat(document.getElementById("compareRate2").value);
+    let rate3 = parseFloat(document.getElementById("compareRate3").value);
+    let years = parseFloat(document.getElementById("years").value);
+    let amount = parseFloat(document.getElementById("amount").value);
+    let mode = document.getElementById("mode").value;
+    
+    let datasets = [];
+    let labels = Array.from({length: years}, (_,i) => "Year " + (i+1));
+    
+    [rate1, rate2, rate3].forEach((rate, idx) => {
+        let data = [];
+        let realR = ((1 + rate/100) / (1 + 6/100)) - 1;
+        if(mode === "SIP") {
+            let total = 0;
+            let monthlyRate = realR / 12;
+            let yearlyP = amount;
+            let stepup = parseFloat(document.getElementById("stepup").value);
+            for(let y = 1; y <= years; y++) {
+                let yearTotal = 0;
+                for(let m = 1; m <= 12; m++) yearTotal = (yearTotal + yearlyP) * (1 + monthlyRate);
+                total += yearTotal;
+                data.push(Math.round(total));
+                yearlyP *= (1 + stepup/100);
+            }
+        } else {
+            let lumpAmount = parseFloat(document.getElementById("lumpAmount").value) || amount;
+            for(let y = 1; y <= years; y++) data.push(Math.round(lumpAmount * Math.pow(1 + realR, y)));
+        }
+        datasets.push({ label: `${rate}% Return`, data: data, borderColor: `hsl(${idx * 120}, 70%, 60%)`, tension: 0.4 });
+    });
+    
+    compareChart.data = { labels, datasets };
+    compareChart.update();
+}
+
+function updatePortfolio() {
+    let equity = parseInt(document.getElementById("equityAlloc").value);
+    let debt = 100 - equity;
+    document.getElementById("equityPercent").innerHTML = equity;
+    document.getElementById("debtPercent").innerHTML = debt;
+    portfolioChart.data.datasets[0].data = [equity, debt];
+    portfolioChart.update();
+    let expectedReturn = (equity * 12 + debt * 7) / 100;
+    document.getElementById("portfolioProjection").innerHTML = `<div class="tip-card">📊 Expected Portfolio Return: ${expectedReturn.toFixed(1)}%<br>🎯 Risk Level: ${equity > 70 ? "High" : equity > 40 ? "Moderate" : "Low"}</div>`;
+}
+
+function addGoal() {
+    let name = document.getElementById("goalName").value;
+    let target = parseFloat(document.getElementById("goalTarget").value);
+    let years = parseFloat(document.getElementById("goalYears").value);
+    if(!name || !target || !years) { alert("Fill all fields"); return; }
+    goals.push({ id: Date.now(), name, target, years });
+    localStorage.setItem("goals", JSON.stringify(goals));
+    loadGoals();
+    showNotification("Goal added!", "success");
+}
+
+function loadGoals() {
+    let html = '<div class="results-grid">';
+    goals.forEach(goal => {
+        let monthlyRequired = goal.target / (goal.years * 12);
+        html += `<div class="result-card"><div class="label">${goal.name}</div><div class="value">₹${goal.target.toLocaleString()}</div><div class="label">₹${Math.round(monthlyRequired).toLocaleString()}/month for ${goal.years} years</div></div>`;
+    });
+    html += '</div>';
+    document.getElementById("goalsList").innerHTML = html || "<p>No goals set yet</p>";
+}
+
+function askAI() {
+    let question = document.getElementById("aiQuestion").value;
+    if(!question) { alert("Enter a question"); return; }
+    let responses = [
+        "Based on your investment profile, consider diversifying across equity (60%), debt (30%), and gold (10%).",
+        "For retirement, aim to save 20-25x your annual expenses. Start early to maximize compounding.",
+        "Systematic Investment Plans (SIPs) are excellent for rupee cost averaging and long-term wealth creation.",
+        "Consider tax-saving instruments like ELSS, PPF, and NPS for efficient tax planning.",
+        "Review your portfolio quarterly and rebalance to maintain desired asset allocation."
+    ];
+    let randomResponse = responses[Math.floor(Math.random() * responses.length)];
+    document.getElementById("aiResponse").innerHTML = `<div class="tip-card"><i class="fas fa-robot"></i> ${randomResponse}<br><br><small>Based on your query: "${question}"</small></div>`;
+}
+
+function calculateTax() {
+    let income = parseFloat(document.getElementById("annualIncome").value);
+    let investment80C = Math.min(parseFloat(document.getElementById("investment80C").value), 150000);
+    if(!income) { alert("Enter income"); return; }
+    let taxableIncome = income - investment80C - 50000;
+    let tax = 0;
+    if(taxableIncome > 1000000) tax = (taxableIncome - 1000000) * 0.3 + 125000;
+    else if(taxableIncome > 500000) tax = (taxableIncome - 500000) * 0.2 + 12500;
+    else if(taxableIncome > 250000) tax = (taxableIncome - 250000) * 0.05;
+    let cess = tax * 0.04;
+    let totalTax = tax + cess;
+    document.getElementById("taxResult").innerHTML = `<div class="tip-card">💰 Taxable Income: ₹${taxableIncome.toLocaleString()}<br>📊 Tax Liability: ₹${totalTax.toLocaleString()}<br>💡 Cess: ₹${cess.toLocaleString()}<br>⭐ Savings: ₹${(income - totalTax).toLocaleString()}</div>`;
+}
+
+function analyzeRisk() {
+    let q1 = parseInt(document.getElementById("riskQ1").value);
+    let q2 = parseInt(document.getElementById("riskQ2").value);
+    let q3 = parseInt(document.getElementById("riskQ3").value);
+    let score = q1 + q2 + q3;
+    let profile = score <= 5 ? "Conservative" : score <= 10 ? "Moderate" : "Aggressive";
+    let recommendation = profile === "Conservative" ? "Focus on debt funds, FDs, and safe instruments." : profile === "Moderate" ? "Mix of equity and debt (60:40)." : "High growth equity funds, small caps, and international diversification.";
+    document.getElementById("riskResult").innerHTML = `<div class="tip-card">🎯 Risk Profile: ${profile}<br>📊 Score: ${score}/15<br>💡 Recommendation: ${recommendation}</div>`;
+}
+
+function saveClient() {
+    let name = document.getElementById("clientName").value.trim();
+    if(!name) { alert("Enter client name"); return; }
+    let data = {
+        id: Date.now(), name, email: document.getElementById("clientEmail").value, phone: document.getElementById("clientPhone").value,
+        amount: document.getElementById("amount").value, lumpAmount: document.getElementById("lumpAmount").value,
+        rate: document.getElementById("rate").value, years: document.getElementById("years").value,
+        mode: document.getElementById("mode").value, inflation: document.getElementById("inflation").value,
+        stepup: document.getElementById("stepup").value, target: document.getElementById("target").value,
+        total: currentCalculation ? currentCalculation.total : 0, date: new Date().toLocaleString()
+    };
+    let clients = JSON.parse(localStorage.getItem("clients") || "[]");
+    clients.push(data);
+    localStorage.setItem("clients", JSON.stringify(clients));
+    document.getElementById("clientName").value = "";
+    document.getElementById("clientEmail").value = "";
+    document.getElementById("clientPhone").value = "";
+    loadClients();
+    showNotification(`Client ${name} saved!`, "success");
+}
+
+function loadClients() {
+    let list = document.getElementById("clientList");
+    list.innerHTML = "";
+    let clients = JSON.parse(localStorage.getItem("clients") || "[]");
+    if(clients.length === 0) { list.innerHTML = '<div style="text-align:center; padding:20px;">No clients saved</div>'; return; }
+    clients.reverse().forEach((c, idx) => {
+        let originalIndex = clients.length - 1 - idx;
+        let div = document.createElement("div");
+        div.style.cssText = "display:flex; justify-content:space-between; align-items:center; padding:15px; background:rgba(26,31,46,0.8); margin-bottom:10px; border-radius:16px;";
+        div.innerHTML = `<div><strong>${escapeHtml(c.name)}</strong><br><small>₹${parseFloat(c.amount || c.lumpAmount).toLocaleString()} | ${c.rate}% | ${c.years}yrs | Corpus: ₹${(c.total || 0).toLocaleString()}</small></div>
+        <div><button class="quick-btn" onclick="loadClient(${originalIndex})" style="padding:6px 12px; margin-right:5px;"><i class="fas fa-chart-line"></i></button>
+        <button class="quick-btn" onclick="deleteClient(${originalIndex})" style="padding:6px 12px; background:var(--danger);"><i class="fas fa-trash"></i></button></div>`;
+        list.appendChild(div);
+    });
+}
+
+function loadClient(index) {
+    let clients = JSON.parse(localStorage.getItem("clients"));
+    let c = clients[index];
+    document.getElementById("mode").value = c.mode || "SIP";
+    onModeChange();
+    document.getElementById("amount").value = c.amount || "10000";
+    document.getElementById("lumpAmount").value = c.lumpAmount || "1000000";
+    document.getElementById("rate").value = c.rate;
+    document.getElementById("years").value = c.years;
+    document.getElementById("inflation").value = c.inflation || "6";
+    document.getElementById("stepup").value = c.stepup || "10";
+    document.getElementById("target").value = c.target || "10000000";
+    calculate();
+    switchTab('calculator');
+    showNotification(`Loaded ${c.name}'s portfolio`, "info");
+}
+
+function deleteClient(index) {
+    Swal.fire({ title: "Delete client?", text: "This action cannot be undone", icon: "warning", showCancelButton: true }).then(result => {
+        if(result.isConfirmed) {
+            let clients = JSON.parse(localStorage.getItem("clients"));
+            clients.splice(index, 1);
+            localStorage.setItem("clients", JSON.stringify(clients));
+            loadClients();
+            showNotification("Client deleted", "warning");
+        }
+    });
+}
+
+function exportFullReport() {
+    if(!currentCalculation) { alert("Calculate first!"); return; }
+    let report = `APEX WEALTH REPORT - ${new Date().toLocaleString()}\n========================================\nINVESTMENT SUMMARY\nInvestment Mode: ${document.getElementById("mode").value}\nAmount: ₹${currentCalculation.amount.toLocaleString()}\nDuration: ${currentCalculation.years} years\nExpected Return: ${currentCalculation.rate}%\n\nRESULTS\nTotal Invested: ₹${currentCalculation.invested.toLocaleString()}\nTotal Returns: ₹${currentCalculation.returns.toLocaleString()}\nFinal Corpus: ₹${currentCalculation.total.toLocaleString()}\nWealth Multiplier: ${(currentCalculation.total/currentCalculation.invested).toFixed(1)}x\nCAGR: ${(Math.pow(currentCalculation.total/currentCalculation.invested, 1/currentCalculation.years)*100 - 100).toFixed(1)}%\n\nGenerated by Apex Wealth Engine Enterprise Edition`;
+    let blob = new Blob([report], {type: 'text/plain'});
+    let link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `apex-report-${Date.now()}.txt`;
+    link.click();
+    showNotification("Report generated!", "success");
+}
+
+function generateFullReport() { exportFullReport(); }
+
+function exportData() {
+    let clients = JSON.parse(localStorage.getItem("clients") || "[]");
+    let dataStr = JSON.stringify(clients, null, 2);
+    let link = document.createElement('a');
+    link.href = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    link.download = 'apex-clients.json';
+    link.click();
+    showNotification("Data exported!", "success");
+}
+
+function importData() {
+    let input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/json';
+    input.onchange = e => {
+        let file = e.target.files[0];
+        let reader = new FileReader();
+        reader.onload = event => {
+            try {
+                let clients = JSON.parse(event.target.result);
+                localStorage.setItem("clients", JSON.stringify(clients));
+                loadClients();
+                showNotification("Data imported!", "success");
+            } catch(err) { alert("Invalid file"); }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+}
+
+function clearAllData() {
+    Swal.fire({ title: "Clear all data?", text: "This will delete ALL client data and goals", icon: "warning", showCancelButton: true }).then(result => {
+        if(result.isConfirmed) {
+            localStorage.clear();
+            goals = [];
+            loadClients();
+            loadGoals();
+            showNotification("All data cleared!", "warning");
+        }
+    });
+}
+
+function showDetail(type) {
+    if(!currentCalculation) return;
+    let msgs = {
+        invested: `Total invested: ₹${currentCalculation.invested.toLocaleString('en-IN')}`,
+        returns: `Total profit: ₹${currentCalculation.returns.toLocaleString('en-IN')}`,
+        total: `Final wealth: ₹${currentCalculation.total.toLocaleString('en-IN')}`,
+        roi: `Return on Investment: ${((currentCalculation.returns/currentCalculation.invested)*100).toFixed(1)}%`,
+        multiplier: `Money multiplied ${(currentCalculation.total/currentCalculation.invested).toFixed(1)}x!`,
+        avg: `Monthly income potential: ₹${Math.round(currentCalculation.total/currentCalculation.years/12).toLocaleString('en-IN')}`
+    };
+    showNotification(msgs[type], "info");
+}
+
+function switchTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(tabName + 'Tab').classList.add('active');
+    toggleMenu();
+    if(tabName === 'goals') loadGoals();
+    if(tabName === 'compare') compareReturns();
+}
+
+function toggleMenu() {
+    document.getElementById('sidebar').classList.toggle('active');
+    document.getElementById('overlay').classList.toggle('active');
+}
+
+function showNotification(message, type) {
+    Swal.fire({ title: message, icon: type, toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
+}
+
+function escapeHtml(text) { let div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+
+function updateTicker() {
+    let indices = ['NIFTY 50', 'SENSEX', 'BANK NIFTY', 'GOLD', 'SILVER', 'BITCOIN'];
+    let values = [19500 + Math.random() * 500, 65000 + Math.random() * 1000, 42000 + Math.random() * 500, 6500 + Math.random() * 100, 75000 + Math.random() * 1000, 45000 + Math.random() * 2000];
+    let changes = ['▲', '▼'];
+    let tickerHtml = indices.map((i, idx) => `${i}: ₹${Math.round(values[idx]).toLocaleString()} ${changes[Math.floor(Math.random()*2)]} ${(Math.random()*2).toFixed(2)}%`).join(' &nbsp;&nbsp;|&nbsp;&nbsp; ');
+    document.getElementById("tickerContent").innerHTML = tickerHtml;
+}
+
+setInterval(updateTicker, 5000);
+initCharts();
+loadClients();
+loadGoals();
+onModeChange();
+calculate();
+updateTicker();
+</script>
+</body>
+</html>
