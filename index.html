@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apex Wealth Engine PRO MAX | Ultimate Investment Suite 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #00fa9a;
+    --primary-dark: #00cc7a;
+    --secondary: #3b82f6;
+    --accent: #8b5cf6;
+    --dark-bg: #0a0e1a;
+    --card-bg: #111827;
+    --card-bg-light: #1a1f2e;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --success: #10b981;
+    --text-muted: #9ca3af;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #0a0e1a 0%, #0f172a 100%);
+    color: #ffffff;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Sidebar Menu */
+.sidebar {
+    position: fixed;
+    left: -280px;
+    top: 0;
+    width: 280px;
+    height: 100vh;
+    background: linear-gradient(180deg, #0f172a 0%, #0a0e1a 100%);
+    border-right: 1px solid rgba(0,250,154,0.2);
+    z-index: 1000;
+    transition: left 0.3s ease;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.5);
+    overflow-y: auto;
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar-header {
+    padding: 25px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 20px;
+}
+
+.sidebar-header h2 {
+    color: var(--primary);
+    font-size: 1.5rem;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-menu li {
+    margin: 5px 15px;
+}
+
+.sidebar-menu li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.sidebar-menu li a:hover, .sidebar-menu li a.active {
+    background: rgba(0,250,154,0.1);
+    color: var(--primary);
+    transform: translateX(5px);
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1001;
+    background: var(--card-bg);
+    border: none;
+    color: var(--primary);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.menu-toggle:hover {
+    background: var(--primary);
+    color: var(--dark-bg);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 999;
+    display: none;
+}
+
+.overlay.active {
+    display: block;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+/* Header */
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(0,250,154,0.1) 0%, rgba(139,92,246,0.1) 100%);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    margin-top: 20px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #00fa9a 0%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.quick-btn {
+    padding: 10px 20px;
+    background: var(--card-bg);
+    border: 1px solid rgba(0,250,154,0.3);
+    border-radius: 12px;
+    color: var(--primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.quick-btn:hover {
+    background: var(--primary);
+    color: var(--dark-bg);
+    transform: translateY(-2px);
+}
+
+/* Main Grid */
+.main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 968px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Cards */
+.card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 24px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--card-bg-light);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0,250,154,0.1);
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #0a0e1a;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,250,154,0.3);
+}
+
+.btn-secondary {
+    background: rgba(59,130,246,0.2);
+    color: var(--secondary);
+    border: 1px solid var(--secondary);
+}
+
+.btn-accent {
+    background: rgba(139,92,246,0.2);
+    color: var(--accent);
+    border: 1px solid var(--accent);
+}
+
+.btn-danger {
+    background: rgba(239,68,68,0.2);
+    color: var(--danger);
+    border: 1px solid var(--danger);
+}
+
+/* Results Grid */
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.result-card {
+    background: var(--card-bg-light);
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.result-card:hover {
+    transform: scale(1.05);
+}
+
+.result-card .label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.result-card .value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.goal-message {
+    text-align: center;
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 15px;
+    font-weight: 600;
+    animation: pulse 1s ease;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+.goal-achieved {
+    background: rgba(16,185,129,0.2);
+    border: 1px solid var(--success);
+    color: var(--success);
+}
+
+.goal-not-achieved {
+    background: rgba(239,68,68,0.2);
+    border: 1px solid var(--danger);
+    color: var(--danger);
+}
+
+/* Chart Container */
+.chart-container {
+    margin-top: 20px;
+    background: var(--card-bg-light);
+    border-radius: 12px;
+    padding: 15px;
+}
+
+canvas {
+    max-height: 300px;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 10px;
+}
+
+.tab {
+    padding: 8px 16px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+}
+
+.tab.active {
+    background: var(--primary);
+    color: var(--dark-bg);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Client Manager */
+.client-manager {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 24px;
+    margin-top: 24px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.client-input-group {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.client-input-group input {
+    flex: 1;
+    min-width: 200px;
+}
+
+.client-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.client-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: var(--card-bg-light);
+    margin-bottom: 8px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.client-item:hover {
+    transform: translateX(5px);
+    background: rgba(0,250,154,0.1);
+}
+
+.client-info {
+    flex: 1;
+}
+
+.client-name {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.client-details {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.client-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* Stats Section */
+.stats-section {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-top: 24px;
+}
+
+.stat-card {
+    background: var(--card-bg-light);
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    background: rgba(0,250,154,0.1);
+}
+
+.stat-card i {
+    font-size: 1.5rem;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .results-grid, .stats-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .client-input-group {
+        flex-direction: column;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .quick-actions {
+        gap: 8px;
+    }
+    
+    .quick-btn {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<button class="menu-toggle" onclick="toggleMenu()">
+    <i class="fas fa-bars"></i>
+</button>
+
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h2><i class="fas fa-crown"></i> Apex Pro</h2>
+        <p style="font-size: 0.8rem; color: var(--text-muted);">Wealth Management Suite</p>
+    </div>
+    <ul class="sidebar-menu">
+        <li><a onclick="switchTab('calculator')"><i class="fas fa-calculator"></i> Calculator</a></li>
+        <li><a onclick="switchTab('clients')"><i class="fas fa-users"></i> Clients</a></li>
+        <li><a onclick="switchTab('analytics')"><i class="fas fa-chart-line"></i> Analytics</a></li>
+        <li><a onclick="switchTab('compare')"><i class="fas fa-chart-simple"></i> Compare</a></li>
+        <li><a onclick="switchTab('settings')"><i class="fas fa-cog"></i> Settings</a></li>
+    </ul>
+</div>
+
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-chart-line"></i> Apex Wealth Engine PRO MAX</h1>
+        <p class="subtitle">Advanced Investment Calculator with Real-time Analytics & Portfolio Management</p>
+    </div>
+
+    <div class="quick-actions">
+        <button class="quick-btn" onclick="loadPreset('conservative')"><i class="fas fa-shield-alt"></i> Conservative</button>
+        <button class="quick-btn" onclick="loadPreset('moderate')"><i class="fas fa-chart-line"></i> Moderate</button>
+        <button class="quick-btn" onclick="loadPreset('aggressive')"><i class="fas fa-rocket"></i> Aggressive</button>
+        <button class="quick-btn" onclick="compareScenarios()"><i class="fas fa-chart-simple"></i> Compare Scenarios</button>
+        <button class="quick-btn" onclick="exportReport()"><i class="fas fa-file-pdf"></i> Export Report</button>
+    </div>
+
+    <!-- Calculator Tab -->
+    <div id="calculatorTab" class="tab-content active">
+        <div class="main-grid">
+            <div class="card">
+                <h3><i class="fas fa-sliders-h"></i> Investment Parameters</h3>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-chart-pie"></i> Investment Mode</label>
+                    <select id="mode" onchange="onModeChange()">
+                        <option value="SIP">Systematic Investment Plan (SIP)</option>
+                        <option value="Lump">Lumpsum Investment</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="sipAmountGroup">
+                    <label><i class="fas fa-rupee-sign"></i> Monthly SIP Amount (₹)</label>
+                    <input type="number" id="amount" value="10000" step="1000">
+                </div>
+                
+                <div class="form-group" id="lumpAmountGroup" style="display: none;">
+                    <label><i class="fas fa-rupee-sign"></i> Lumpsum Amount (₹)</label>
+                    <input type="number" id="lumpAmount" value="1000000" step="100000">
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-percentage"></i> Expected Return Rate (%)</label>
+                    <input type="number" id="rate" value="12" step="0.5">
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-calendar-alt"></i> Investment Duration (Years)</label>
+                    <input type="number" id="years" value="10" step="1">
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-chart-line"></i> Inflation Rate (%)</label>
+                    <input type="number" id="inflation" value="6" step="0.5">
+                </div>
+                
+                <div class="form-group" id="stepupGroup">
+                    <label><i class="fas fa-arrow-up"></i> Step-up / Annual Increase (%)</label>
+                    <input type="number" id="stepup" value="10" step="1">
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-bullseye"></i> Financial Goal (₹)</label>
+                    <input type="number" id="target" value="10000000">
+                </div>
+                
+                <button class="btn btn-primary" onclick="calculateAndRefresh()">
+                    <i class="fas fa-sync-alt"></i> Calculate & Refresh
+                </button>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-chart-bar"></i> Investment Results</h3>
+                
+                <div class="results-grid">
+                    <div class="result-card" onclick="showDetail('invested')">
+                        <div class="label">Total Invested</div>
+                        <div class="value" id="invested">₹ 0</div>
+                    </div>
+                    <div class="result-card" onclick="showDetail('returns')">
+                        <div class="label">Total Returns</div>
+                        <div class="value" id="returns">₹ 0</div>
+                    </div>
+                    <div class="result-card" onclick="showDetail('total')">
+                        <div class="label">Final Corpus</div>
+                        <div class="value" id="total">₹ 0</div>
+                    </div>
+                </div>
+                
+                <div id="goalMsg" class="goal-message"></div>
+                
+                <div class="chart-container">
+                    <canvas id="chart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stats-section" id="statsSection"></div>
+    </div>
+
+    <!-- Clients Tab -->
+    <div id="clientsTab" class="tab-content">
+        <div class="client-manager">
+            <h3><i class="fas fa-user-plus"></i> Client Portfolio Manager</h3>
+            
+            <div class="client-input-group">
+                <input type="text" id="clientName" placeholder="Enter client name">
+                <input type="text" id="clientEmail" placeholder="Email (optional)">
+                <button class="btn btn-primary" onclick="saveClient()">
+                    <i class="fas fa-save"></i> Save Portfolio
+                </button>
+                <button class="btn btn-secondary" onclick="exportData()">
+                    <i class="fas fa-download"></i> Export All
+                </button>
+                <button class="btn btn-accent" onclick="importData()">
+                    <i class="fas fa-upload"></i> Import
+                </button>
+            </div>
+            
+            <div id="clientList" class="client-list"></div>
+        </div>
+    </div>
+
+    <!-- Analytics Tab -->
+    <div id="analyticsTab" class="tab-content">
+        <div class="card">
+            <h3><i class="fas fa-chart-pie"></i> Advanced Analytics</h3>
+            <canvas id="analyticsChart" style="max-height: 400px;"></canvas>
+            <div id="analyticsData" style="margin-top: 20px;"></div>
+        </div>
+    </div>
+
+    <!-- Compare Tab -->
+    <div id="compareTab" class="tab-content">
+        <div class="card">
+            <h3><i class="fas fa-chart-simple"></i> Compare Scenarios</h3>
+            <div class="form-group">
+                <label>Scenario 1 Return %</label>
+                <input type="number" id="compareRate1" value="10">
+            </div>
+            <div class="form-group">
+                <label>Scenario 2 Return %</label>
+                <input type="number" id="compareRate2" value="12">
+            </div>
+            <div class="form-group">
+                <label>Scenario 3 Return %</label>
+                <input type="number" id="compareRate3" value="15">
+            </div>
+            <button class="btn btn-primary" onclick="compareReturns()">Compare Returns</button>
+            <canvas id="compareChart" style="margin-top: 20px; max-height: 400px;"></canvas>
+        </div>
+    </div>
+
+    <!-- Settings Tab -->
+    <div id="settingsTab" class="tab-content">
+        <div class="card">
+            <h3><i class="fas fa-cog"></i> Settings & Preferences</h3>
+            <div class="form-group">
+                <label><i class="fas fa-palette"></i> Theme</label>
+                <select id="themeSelect" onchange="changeTheme()">
+                    <option value="dark">Dark Theme</option>
+                    <option value="light">Light Theme</option>
+                    <option value="auto">Auto</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-bell"></i> Notifications</label>
+                <input type="checkbox" id="notifications" checked> Enable notifications
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-database"></i> Clear All Data</label>
+                <button class="btn btn-danger" onclick="clearAllData()">Clear All Client Data</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let chart, analyticsChart, compareChart;
+let currentCalculation = null;
+
+// Initialize charts
+function initCharts() {
+    chart = new Chart(document.getElementById("chart"), {
+        type: 'line',
+        data: { labels: [], datasets: [{ label: "Portfolio Growth (₹)", data: [], borderColor: "#00fa9a", backgroundColor: "rgba(0,250,154,0.1)", tension: 0.4, fill: true }] },
+        options: getChartOptions()
+    });
+    
+    analyticsChart = new Chart(document.getElementById("analyticsChart"), {
+        type: 'bar',
+        data: { labels: [], datasets: [] },
+        options: getChartOptions()
+    });
+    
+    compareChart = new Chart(document.getElementById("compareChart"), {
+        type: 'line',
+        data: { labels: [], datasets: [] },
+        options: getChartOptions()
+    });
+}
+
+function getChartOptions() {
+    return {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: { legend: { labels: { color: '#ffffff' } } },
+        scales: {
+            y: { ticks: { color: '#9ca3af', callback: v => '₹' + v.toLocaleString('en-IN') }, grid: { color: 'rgba(255,255,255,0.1)' } },
+            x: { ticks: { color: '#9ca3af' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+        }
+    };
+}
+
+function onModeChange() {
+    let mode = document.getElementById("mode").value;
+    if(mode === "SIP") {
+        document.getElementById("sipAmountGroup").style.display = "block";
+        document.getElementById("lumpAmountGroup").style.display = "none";
+        document.getElementById("stepupGroup").style.display = "block";
+    } else {
+        document.getElementById("sipAmountGroup").style.display = "none";
+        document.getElementById("lumpAmountGroup").style.display = "block";
+        document.getElementById("stepupGroup").style.display = "none";
+    }
+    calculateAndRefresh();
+}
+
+function calculateAndRefresh() {
+    calculate();
+    if(document.getElementById("notifications").checked) {
+        showNotification("Calculation completed!", "success");
+    }
+}
+
+function calculate() {
+    let mode = document.getElementById("mode").value;
+    let P = mode === "SIP" ? parseFloat(document.getElementById("amount").value) : parseFloat(document.getElementById("lumpAmount").value);
+    let r = parseFloat(document.getElementById("rate").value);
+    let t = parseFloat(document.getElementById("years").value);
+    let inflation = parseFloat(document.getElementById("inflation").value);
+    let stepup = mode === "SIP" ? parseFloat(document.getElementById("stepup").value) : 0;
+    let target = parseFloat(document.getElementById("target").value);
+    
+    if(isNaN(P) || isNaN(r) || isNaN(t) || isNaN(inflation)) {
+        alert("Please fill all fields with valid numbers");
+        return;
+    }
+    
+    let realR = ((1 + r/100) / (1 + inflation/100)) - 1;
+    let total = 0, invested = 0, yearly = [];
+    
+    if(mode === "SIP") {
+        let monthlyRate = realR / 12;
+        let yearlyP = P;
+        
+        for(let y = 1; y <= t; y++) {
+            let yearTotal = 0;
+            for(let m = 1; m <= 12; m++) {
+                yearTotal = (yearTotal + yearlyP) * (1 + monthlyRate);
+            }
+            total += yearTotal;
+            invested += yearlyP * 12;
+            yearly.push(Math.round(total));
+            yearlyP *= (1 + stepup/100);
+        }
+    } else {
+        total = P * Math.pow(1 + realR, t);
+        invested = P;
+        for(let y = 1; y <= t; y++) {
+            yearly.push(Math.round(P * Math.pow(1 + realR, y)));
+        }
+    }
+    
+    let returns = total - invested;
+    currentCalculation = { total, invested, returns, yearly, mode, years: t };
+    
+    document.getElementById("invested").innerHTML = "₹ " + invested.toLocaleString('en-IN');
+    document.getElementById("returns").innerHTML = "₹ " + returns.toLocaleString('en-IN');
+    document.getElementById("total").innerHTML = "₹ " + total.toLocaleString('en-IN');
+    
+    let msgDiv = document.getElementById("goalMsg");
+    if(total >= target) {
+        msgDiv.innerHTML = '<i class="fas fa-trophy"></i> 🎉 Target Achieved! Congratulations! 🎉 <i class="fas fa-trophy"></i>';
+        msgDiv.className = "goal-message goal-achieved";
+    } else {
+        let shortfall = target - total;
+        msgDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Shortfall: ₹ ${shortfall.toLocaleString('en-IN')}. Need ${Math.ceil((target/total)*100-100)}% more returns.`;
+        msgDiv.className = "goal-message goal-not-achieved";
+    }
+    
+    updateStats(total, invested, returns, t, r);
+    
+    chart.data.labels = yearly.map((_,i)=> "Year " + (i+1));
+    chart.data.datasets[0].data = yearly;
+    chart.update();
+    
+    updateAnalytics();
+}
+
+function updateStats(total, invested, returns, years, rate) {
+    let statsHtml = `
+        <div class="stat-card" onclick="showDetail('roi')">
+            <i class="fas fa-chart-line"></i>
+            <div class="stat-value">${((returns/invested)*100).toFixed(1)}%</div>
+            <div class="stat-label">Total ROI</div>
+        </div>
+        <div class="stat-card" onclick="showDetail('xirr')">
+            <i class="fas fa-percentage"></i>
+            <div class="stat-value">${rate}%</div>
+            <div class="stat-label">Annual Return</div>
+        </div>
+        <div class="stat-card" onclick="showDetail('avg')">
+            <i class="fas fa-chart-simple"></i>
+            <div class="stat-value">${Math.round(total/years).toLocaleString('en-IN')}</div>
+            <div class="stat-label">Avg Annual Growth</div>
+        </div>
+        <div class="stat-card" onclick="showDetail('multiplier')">
+            <i class="fas fa-chart-line"></i>
+            <div class="stat-value">${(total/invested).toFixed(1)}x</div>
+            <div class="stat-label">Wealth Multiplier</div>
+        </div>
+    `;
+    document.getElementById("statsSection").innerHTML = statsHtml;
+}
+
+function updateAnalytics() {
+    if(!currentCalculation) return;
+    
+    let data = [];
+    for(let i = 0; i < currentCalculation.yearly.length; i++) {
+        data.push(currentCalculation.yearly[i]);
+    }
+    
+    analyticsChart.data = {
+        labels: currentCalculation.yearly.map((_,i)=> "Y" + (i+1)),
+        datasets: [{ label: "Portfolio Value", data: data, backgroundColor: "rgba(0,250,154,0.5)", borderColor: "#00fa9a", borderWidth: 2 }]
+    };
+    analyticsChart.update();
+    
+    document.getElementById("analyticsData").innerHTML = `
+        <div class="results-grid">
+            <div class="result-card"><div class="label">Peak Year</div><div class="value">Year ${currentCalculation.yearly.length}</div></div>
+            <div class="result-card"><div class="label">Growth Rate</div><div class="value">${((currentCalculation.returns/currentCalculation.invested)*100).toFixed(1)}%</div></div>
+            <div class="result-card"><div class="label">Monthly Equivalent</div><div class="value">₹ ${Math.round(currentCalculation.total/currentCalculation.years/12).toLocaleString('en-IN')}</div></div>
+        </div>
+    `;
+}
+
+function compareReturns() {
+    let rate1 = parseFloat(document.getElementById("compareRate1").value);
+    let rate2 = parseFloat(document.getElementById("compareRate2").value);
+    let rate3 = parseFloat(document.getElementById("compareRate3").value);
+    let years = parseFloat(document.getElementById("years").value);
+    let amount = parseFloat(document.getElementById("amount").value);
+    let mode = document.getElementById("mode").value;
+    
+    let datasets = [];
+    let labels = Array.from({length: years}, (_,i) => "Year " + (i+1));
+    
+    [rate1, rate2, rate3].forEach((rate, idx) => {
+        let data = [];
+        let realR = ((1 + rate/100) / (1 + parseFloat(document.getElementById("inflation").value)/100)) - 1;
+        
+        if(mode === "SIP") {
+            let total = 0;
+            let monthlyRate = realR / 12;
+            let yearlyP = amount;
+            let stepup = parseFloat(document.getElementById("stepup").value);
+            
+            for(let y = 1; y <= years; y++) {
+                let yearTotal = 0;
+                for(let m = 1; m <= 12; m++) {
+                    yearTotal = (yearTotal + yearlyP) * (1 + monthlyRate);
+                }
+                total += yearTotal;
+                data.push(Math.round(total));
+                yearlyP *= (1 + stepup/100);
+            }
+        } else {
+            let lumpAmount = parseFloat(document.getElementById("lumpAmount").value) || amount;
+            for(let y = 1; y <= years; y++) {
+                data.push(Math.round(lumpAmount * Math.pow(1 + realR, y)));
+            }
+        }
+        
+        datasets.push({ label: `${rate}% Return`, data: data, borderColor: `hsl(${idx * 120}, 70%, 60%)`, tension: 0.4 });
+    });
+    
+    compareChart.data = { labels: labels, datasets: datasets };
+    compareChart.update();
+}
+
+function loadPreset(type) {
+    if(type === 'conservative') {
+        document.getElementById("rate").value = "8";
+        document.getElementById("inflation").value = "5";
+    } else if(type === 'moderate') {
+        document.getElementById("rate").value = "12";
+        document.getElementById("inflation").value = "6";
+    } else if(type === 'aggressive') {
+        document.getElementById("rate").value = "18";
+        document.getElementById("inflation").value = "7";
+    }
+    calculateAndRefresh();
+    showNotification(`${type.toUpperCase()} preset loaded!`, "success");
+}
+
+function saveClient() {
+    let name = document.getElementById("clientName").value.trim();
+    if(!name) { alert("Please enter client name"); return; }
+    
+    let data = {
+        id: Date.now(),
+        name: name,
+        email: document.getElementById("clientEmail").value,
+        amount: document.getElementById("amount").value,
+        lumpAmount: document.getElementById("lumpAmount").value,
+        rate: document.getElementById("rate").value,
+        years: document.getElementById("years").value,
+        mode: document.getElementById("mode").value,
+        inflation: document.getElementById("inflation").value,
+        stepup: document.getElementById("stepup").value,
+        target: document.getElementById("target").value,
+        total: currentCalculation ? currentCalculation.total : 0,
+        date: new Date().toLocaleString()
+    };
+    
+    let clients = JSON.parse(localStorage.getItem("clients") || "[]");
+    clients.push(data);
+    localStorage.setItem("clients", JSON.stringify(clients));
+    
+    document.getElementById("clientName").value = "";
+    document.getElementById("clientEmail").value = "";
+    loadClients();
+    showNotification(`Client ${name} saved!`, "success");
+}
+
+function loadClients() {
+    let list = document.getElementById("clientList");
+    list.innerHTML = "";
+    let clients = JSON.parse(localStorage.getItem("clients") || "[]");
+    
+    if(clients.length === 0) {
+        list.innerHTML = '<div style="text-align:center; padding:20px; color:#9ca3af;">No clients saved yet</div>';
+        return;
+    }
+    
+    clients.reverse().forEach((c, idx) => {
+        let originalIndex = clients.length - 1 - idx;
+        let div = document.createElement("div");
+        div.className = "client-item";
+        div.innerHTML = `
+            <div class="client-info">
+                <div class="client-name"><i class="fas fa-user-circle"></i> ${escapeHtml(c.name)}</div>
+                <div class="client-details">₹${parseFloat(c.amount || c.lumpAmount).toLocaleString('en-IN')} | ${c.rate}% | ${c.years} yrs | ${c.mode} | Corpus: ₹${(c.total || 0).toLocaleString('en-IN')}</div>
+            </div>
+            <div class="client-actions">
+                <button class="btn btn-secondary" onclick="loadClient(${originalIndex})"><i class="fas fa-chart-line"></i></button>
+                <button class="btn btn-danger" onclick="deleteClient(${originalIndex})"><i class="fas fa-trash"></i></button>
+            </div>
+        `;
+        list.appendChild(div);
+    });
+}
+
+function loadClient(index) {
+    let clients = JSON.parse(localStorage.getItem("clients"));
+    let c = clients[index];
+    
+    document.getElementById("mode").value = c.mode || "SIP";
+    onModeChange();
+    document.getElementById("amount").value = c.amount || "10000";
+    document.getElementById("lumpAmount").value = c.lumpAmount || "1000000";
+    document.getElementById("rate").value = c.rate;
+    document.getElementById("years").value = c.years;
+    document.getElementById("inflation").value = c.inflation || "6";
+    document.getElementById("stepup").value = c.stepup || "10";
+    document.getElementById("target").value = c.target || "10000000";
+    
+    calculateAndRefresh();
+    switchTab('calculator');
+    showNotification(`Loaded ${c.name}'s portfolio`, "info");
+}
+
+function deleteClient(index) {
+    if(confirm("Delete this client?")) {
+        let clients = JSON.parse(localStorage.getItem("clients"));
+        clients.splice(index, 1);
+        localStorage.setItem("clients", JSON.stringify(clients));
+        loadClients();
+        showNotification("Client deleted", "warning");
+    }
+}
+
+function exportData() {
+    let clients = JSON.parse(localStorage.getItem("clients") || "[]");
+    let dataStr = JSON.stringify(clients, null, 2);
+    let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    let link = document.createElement('a');
+    link.setAttribute('href', dataUri);
+    link.setAttribute('download', 'apex-wealth-clients.json');
+    link.click();
+    showNotification("Data exported!", "success");
+}
+
+function importData() {
+    let input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/json';
+    input.onchange = e => {
+        let file = e.target.files[0];
+        let reader = new FileReader();
+        reader.onload = event => {
+            try {
+                let clients = JSON.parse(event.target.result);
+                localStorage.setItem("clients", JSON.stringify(clients));
+                loadClients();
+                showNotification("Data imported successfully!", "success");
+            } catch(err) {
+                alert("Invalid file format");
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+}
+
+function exportReport() {
+    if(!currentCalculation) { alert("Calculate first!"); return; }
+    let report = `APEX WEALTH REPORT\n==================\nDate: ${new Date().toLocaleString()}\nTotal Invested: ₹${currentCalculation.invested.toLocaleString('en-IN')}\nTotal Returns: ₹${currentCalculation.returns.toLocaleString('en-IN')}\nFinal Corpus: ₹${currentCalculation.total.toLocaleString('en-IN')}\nWealth Multiplier: ${(currentCalculation.total/currentCalculation.invested).toFixed(1)}x`;
+    let blob = new Blob([report], {type: 'text/plain'});
+    let link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `apex-report-${Date.now()}.txt`;
+    link.click();
+    showNotification("Report exported!", "success");
+}
+
+function compareScenarios() {
+    switchTab('compare');
+    compareReturns();
+}
+
+function showDetail(type) {
+    if(!currentCalculation) return;
+    let msg = "";
+    if(type === 'invested') msg = `Total amount you invested: ₹${currentCalculation.invested.toLocaleString('en-IN')}`;
+    else if(type === 'returns') msg = `Total profit earned: ₹${currentCalculation.returns.toLocaleString('en-IN')}`;
+    else if(type === 'total') msg = `Final wealth after ${currentCalculation.years} years: ₹${currentCalculation.total.toLocaleString('en-IN')}`;
+    else if(type === 'roi') msg = `Return on Investment: ${((currentCalculation.returns/currentCalculation.invested)*100).toFixed(1)}%`;
+    else if(type === 'multiplier') msg = `Your money multiplied ${(currentCalculation.total/currentCalculation.invested).toFixed(1)} times!`;
+    else if(type === 'avg') msg = `Average annual growth: ₹${Math.round(currentCalculation.total/currentCalculation.years).toLocaleString('en-IN')}`;
+    showNotification(msg, "info");
+}
+
+function switchTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(tabName + 'Tab').classList.add('active');
+    document.querySelectorAll('.sidebar-menu a').forEach(link => link.classList.remove('active'));
+    toggleMenu();
+    
+    if(tabName === 'analytics') updateAnalytics();
+    if(tabName === 'compare') compareReturns();
+}
+
+function toggleMenu() {
+    document.getElementById('sidebar').classList.toggle('active');
+    document.getElementById('overlay').classList.toggle('active');
+}
+
+function changeTheme() {
+    let theme = document.getElementById('themeSelect').value;
+    if(theme === 'light') {
+        document.body.style.background = "#f3f4f6";
+        document.body.style.color = "#1f2937";
+    } else if(theme === 'dark') {
+        document.body.style.background = "linear-gradient(135deg, #0a0e1a 0%, #0f172a 100%)";
+        document.body.style.color = "#ffffff";
+    }
+}
+
+function clearAllData() {
+    if(confirm("⚠️ WARNING: This will delete ALL client data! Are you sure?")) {
+        localStorage.removeItem("clients");
+        loadClients();
+        showNotification("All client data cleared!", "warning");
+    }
+}
+
+function showNotification(message, type) {
+    let notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed; top: 80px; right: 20px; padding: 12px 20px;
+        background: ${type === 'success' ? '#10b981' : type === 'warning' ? '#f59e0b' : '#3b82f6'};
+        color: white; border-radius: 12px; z-index: 1002;
+        animation: fadeIn 0.3s ease-out; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    `;
+    notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i> ${message}`;
+    document.body.appendChild(notification);
+    setTimeout(() => { notification.style.opacity = '0'; setTimeout(() => notification.remove(), 300); }, 3000);
+}
+
+function escapeHtml(text) { let div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+
+// Initialize
+initCharts();
+loadClients();
+onModeChange();
+calculateAndRefresh();
+</script>
+</body>
+</html>
